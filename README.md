@@ -1,2 +1,2 @@
 # elasticsearch-with-seunjeon
-dockerize elasticsearch container with seunjeon plugin as Korean analyzer
+dockerize elasticsearch 6.1.1 container with seunjeon 6.1.1.1 plugin as Korean analyzer
