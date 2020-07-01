@@ -1,0 +1,37 @@
+version: '3.3'
+
+volumes:
+  es_data:
+    driver: local
+
+services:
+  es:
+    image: docker.elastic.co/elasticsearch/elasticsearch:6.1.1
+    container_name: es
+    environment:
+      - node.name=elasticsearch
+      - discovery.type=single-node
+    build:
+      context: .
+      dockerfile: ./compose/es.dev.dockerfile
+    volumes:
+      - es_data:/usr/share/elasticsearch/data
+    ports:
+      - 9200:9200
+    healthcheck:
+      test: curl http://es:9200 || exit 1
+      interval: 10s
+      timeout: 5s
+      retries: 3
+    networks:
+      - default
+
+  kb:
+    image: docker.elastic.co/kibana/kibana:6.1.1
+    depends_on:
+      - es
+    ports:
+      - 5601:5601
+    environment:
+      ELASTICSEARCH_URL: http://es:9200
+      ELASTICSEARCH_HOSTS: http://es:9200
